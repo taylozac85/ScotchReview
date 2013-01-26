@@ -1,4 +1,13 @@
 ScotchReview::Application.routes.draw do
+  resources :reviews
+
+
+  resources :drinks
+
+
+  resources :users
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

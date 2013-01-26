@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  drink_name: MyString
+  average_rating: 1.5
+  description: MyText
+
+two:
+  drink_name: MyString
+  average_rating: 1.5
+  description: MyText
