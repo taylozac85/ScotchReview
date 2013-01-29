@@ -1,12 +1,13 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
     <div class="container">
-      <%= link_to "Scotch Review", root_path, id: "logo" %>
+      <%= link_to image_tag("scotch-Whisky-Glass.jpg", :size => "30x30", id: "logo_image"), root_path %>
+      <%= link_to "Shot of Life", root_path, id: "logo" %>
       <nav>
         <ul class="nav pull-right">
-          <li><%= link_to "Home",    root_path %></li>
-          <li><%= link_to "Help",    help_path %></li>
-          <li><%= link_to "Sign in", '#' %></li>
+          <li><%= link_to "Peer Reviews",       reviews_path %></li>
+          <li><%= link_to "My Journal", user_path(1) %></li> <!--FIX-->
+          <li><%= link_to "Sign in",    '#' %></li>
         </ul>
       </nav>
     </div>
