@@ -11,3 +11,9 @@
  *= require_self
  *= require_tree .
  */
+
+/* MY COMMENT: "*= require_self and require_tree" above
+* communicate to the Sprockets gem and ensure that any CSS in
+* this file or any files in the stylesheets directory are
+* included in application.css
+*/
