@@ -44,6 +44,9 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+        # flash is a hash- the expression below sets key ':success' to value 'Welcome...'
+        # in layouts/application.html.erb flash.each do |key,value| uses this key,value pair as arguements
+        flash[:success] = "Welcome to the Sample App!"
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render json: @user, status: :created, location: @user }
       else
