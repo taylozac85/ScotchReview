@@ -8,6 +8,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  password_digest :string(255)
+#  remember_token  :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -19,12 +20,18 @@ class User < ActiveRecord::Base
   # used to ensure email uniqueness because not all database adapters
   # use case-sensitive indices
   before_save { |user| user.user_email = user_email.downcase }
+  before_save :create_remember_token
 
   validates :user_name, :presence => true, :length => { :maximum => 50}
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :user_email, :presence => true, 
   						 :format => { with: VALID_EMAIL_REGEX }, 
   						 :uniqueness => { :case_sensitive => false }
-  validates :password, :presence => true, :length => { :minimum => 6 }
+  validates :password, :length => { :minimum => 6 }
   validates :password_confirmation, :presence => true
+  
+  private
+    def create_remember_token
+      self.remember_token = SecureRandom.urlsafe_base64
+    end
 end

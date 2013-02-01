@@ -12,4 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap
 //= require_tree .
+
+// MY NOTE: the require bootstrap line is added by me to include Bootstrap's JavaScript library

@@ -44,6 +44,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+        # so that when a user signs up they are automatically signed in
+        sign_in @user
         # flash is a hash- the expression below sets key ':success' to value 'Welcome...'
         # in layouts/application.html.erb flash.each do |key,value| uses this key,value pair as arguements
         flash[:success] = "Welcome to the Sample App!"
