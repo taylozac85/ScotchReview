@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
+  before_filter :signed_in_user, :only => [:index, :edit, :update, :destroy]
+  before_filter :correct_user,   :only => [:edit, :update]
+  before_filter :admin_user,     :only => :destroy
+
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.paginate(:page => params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,6 +18,7 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
+    @reviews = @user.reviews.paginate(:page => params[:page])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,7 +39,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @user = User.find(params[:id])
+    # no need to assign @user because that is done with :correct_user in the before_filter
   end
 
   # POST /users
@@ -49,7 +54,7 @@ class UsersController < ApplicationController
         # flash is a hash- the expression below sets key ':success' to value 'Welcome...'
         # in layouts/application.html.erb flash.each do |key,value| uses this key,value pair as arguements
         flash[:success] = "Welcome to the Sample App!"
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to @user }
         format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }
@@ -61,11 +66,15 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.json
   def update
-    @user = User.find(params[:id])
+    # no need to assign @user because that is done with :correct_user in the before_filter
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        flash[:success] = 'User was successfully updated.'
+        # flash is a hash- the expression below sets key ':success' to value 'Welcome...'
+        # in layouts/application.html.erb flash.each do |key,value| uses this key,value pair as arguements
+        sign_in @user
+        format.html { redirect_to @user }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -77,12 +86,30 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    @user = User.find(params[:id])
-    @user.destroy
-
+    User.find(params[:id]).destroy
+    flash[:success] = "User destroyed."
+    
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }
     end
   end
+
+  private
+
+    def signed_in_user
+      unless signed_in?
+        store_location
+        redirect_to signin_url, :notice => "Please sign in."
+      end
+    end
+
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to(root_path) unless current_user?(@user)
+    end
+
+    def admin_user
+      redirect_to(root_path) unless current_user.admin?
+    end
 end

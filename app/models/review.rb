@@ -13,11 +13,14 @@
 #
 
 class Review < ActiveRecord::Base
-  attr_accessible :drink_id, :rating, :review, :review_date, :user_id
-  
+  attr_accessible :rating, :review
   belongs_to :user
   belongs_to :drink
 
   validates :review, :length => { :in => 1..500 }
-  validates :drink_id, :rating, :review, :review_date, :user_id, :presence => true
+  validates :review, :user_id, :presence => true
+
+  # orders the reviews by when they were created, with most recent being first.
+  # 'DESC' is SQL for 'descending'
+  default_scope :order => 'reviews.created_at DESC'
 end

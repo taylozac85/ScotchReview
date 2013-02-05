@@ -9,13 +9,14 @@
 #  updated_at      :datetime         not null
 #  password_digest :string(255)
 #  remember_token  :string(255)
+#  admin           :boolean          default(FALSE)
 #
 
 class User < ActiveRecord::Base
   attr_accessible :user_email, :user_name, :password, :password_confirmation
   has_secure_password
-
-  has_many :reviews
+  # :dependent => :destroy ensures that if a user is destroyed by an admin, the associated reviews are destroyed
+  has_many :reviews, :dependent => :destroy
 
   # used to ensure email uniqueness because not all database adapters
   # use case-sensitive indices
