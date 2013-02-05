@@ -17,7 +17,7 @@ class Review < ActiveRecord::Base
   belongs_to :user
   belongs_to :drink
 
-  validates :review, :length => { :in => 1..500 }
+  validates :review, :length => { :maximum => 500 }
   validates :review, :user_id, :presence => true
 
   # orders the reviews by when they were created, with most recent being first.
